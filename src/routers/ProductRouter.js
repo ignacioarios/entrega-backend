@@ -1,166 +1,49 @@
-const express = require("express")
-const ProductManager = require("../models/ProductManager")
-const error500  = require("../utils")
+const express = require("express");
+const ProductManager = require("../models/ProductManager");
+const { validateProductId, validateProductData } = require("../validations/validations");
+const error500 = require("../utils");
 
-ProductManager.setPath("./data/products.json")
+ProductManager.setPath("./data/products.json");
 
-const ProductRouter = express.Router()
+const ProductRouter = express.Router();
 
-ProductRouter.get("/",async (req,res)=>{
-    try{
-        let products = await ProductManager.getProducts()
-        res.status(200).send(products)
-    }catch(error){
-        console.error(`error: ${error}`)
-        res.setHeader('Content-type','application/json')
-        res.status(500).json({status:"error", error:"error get products"})
-    }
-    
-})
-
-ProductRouter.get("/:pid",async (req,res)=>{
-    res.setHeader('Content-type','application/json')
-    
-    let productId = req.params.pid
-    
-    productId = Number(productId)
-    
-    if(isNaN(productId)){
-        return res.status(400).json({status:"error",error:"Incorrect data type"})
-    }
-
+ProductRouter.post("/", validateProductData, async (req, res) => {
     try {
-        let productDb = await ProductManager.getProductById(productId)
-        if(!productDb){
-            return res.status(404).send({status:"error",error:"product not found"})
-        }
-        return res.status(200).send(productDb)
+        const newProduct = await ProductManager.addProduct(req.body);
+        res.status(201).json({ status: "success", message: "Product added", product: newProduct });
     } catch (error) {
-        error500(res,error)
+        error500(res, error);
     }
-    
-})
+});
 
-ProductRouter.post("/",async (req,res)=>{
-    let { title, description, code, price, status, stock, category, thumbnails} = req.body
-    price = Number(price)
-    stock = Number(stock)
-    if(isNaN(price)){
-        res.setHeader('Content-type','application/json')
-        return res.status(400).json({status:"error",error:"Price is not a number"})
-    }
-    if(isNaN(stock)){
-        res.setHeader('Content-type','application/json')
-        return res.status(400).json({status:"error",error:"stock is not a number"})
-    }
-
-    if (isNaN(price)) {
-        return res.status(400).json({ status: "error", error: "Price must be a valid number" })
-    }
-    
-    if (isNaN(stock)) {
-        return res.status(400).json({ status: "error", error: "Stock must be a valid number" })
-    }
-    
-    if (typeof title !== "string" || title.trim() === "") {
-        return res.status(400).json({ status: "error", error: "Title must be a non-empty string" })
-    }
-    
-    if (typeof description !== "string" || description.trim() === "") {
-        return res.status(400).json({ status: "error", error: "Description must be a non-empty string" })
-    }
-    
-    if (typeof code !== "string" || code.trim() === "") {
-        return res.status(400).json({ status: "error", error: "Code must be a non-empty string" })
-    }
-    
-    if (typeof status !== "boolean") {
-        return res.status(400).json({ status: "error", error: "Status must be a boolean" })
-    }
-    
-    if (typeof stock !== "number" || stock < 0) {
-        return res.status(400).json({ status: "error", error: "Stock must be a non-negative number" })
-    }
-    
-    if (typeof category !== "string" || category.trim() === "") {
-        return res.status(400).json({ status: "error", error: "Category must be a non-empty string" })
-    }
-    
-    if (thumbnails &&(!Array.isArray(thumbnails) || thumbnails.length === 0 || !thumbnails.every(item => typeof item === 'string'))) {
-        return res.status(400).json({ status: "error", error: "Thumbnails must be a non-empty array of strings" })
-    }
-    
-    if (!title || !description || !code || price <= 0 || stock < 0 || !category) {
-        return res.status(400).json({ status: "error", error: "All fields are required and must be valid" })
-    }
-    
-    try{
-        let productDb = await ProductManager.getProduct(title,code)
-        if(productDb){
-            res.setHeader('Content-type','application/json')
-            return res.status(400).send({status:"error",message:"Product exits"})
+ProductRouter.get("/:pid", validateProductId, async (req, res) => {
+    try {
+        const product = await ProductManager.getProductById(req.productId); // Usamos el productId validado
+        if (!product) {
+            return res.status(404).json({ status: "error", error: "Product not found" });
         }
-
-        ProductManager.addProduct(title, description, code, price, status, stock, category, thumbnails)
-        res.setHeader('Content-type','application/json')
-        return res.status(201).send({status:"success",message:"product create"})
-    }catch(error){
-        error500(res,error)
+        res.status(200).json(product);
+    } catch (error) {
+        error500(res, error);
     }
-    
-})
+});
 
-ProductRouter.put("/:pid", async (req,res)=>{
-    let { title, description, code, price, status, stock, category, thumbnails } = req.body
-    let productId = req.params.pid
-
-    productId = Number(productId)
-    if(isNaN(productId)){
-        res.setHeader('Content-type','application/json')
-        return res.status(400).json({status:"error",error:"Incorrect data type"})
+ProductRouter.put("/:pid", validateProductId, validateProductData, async (req, res) => {
+    try {
+        const updatedProduct = await ProductManager.updateProduct(req.productId, req.body); // Usamos productId y validamos datos
+        res.status(200).json({ status: "success", message: "Product updated", product: updatedProduct });
+    } catch (error) {
+        error500(res, error);
     }
-    
-    try{
-        let productDb = await ProductManager.getProductById(productId)
-        console.log(`productoDb: ${productDb}`)
-        if(!productDb){
-            res.setHeader('Content-type','application/json')
-            res.status(404).json({status:"error",error:"product not exist"})
-        }
-        await ProductManager.updateProduct(productId,title,description,code,price,status,stock,category,thumbnails)
-        
-        res.setHeader('Content-type','application/json')
-        return res.status(200).json({status:"success",message:"product update"})
-    }catch(error){
-        res.setHeader('Content-type','application/json')
-        return res.status(500).json({status:"error",error:`error to delete product: ${error}`})
-    }
-})
+});
 
-ProductRouter.delete("/:pid", async (req,res)=>{
-    let productId = req.params.pid
-    
-    productId = Number(productId)
-    
-    if(isNaN(productId)){
-        res.setHeader('Content-type','application/json')
-        return res.status(400).json({status:"error",error:"Incorrect data type"})
+ProductRouter.delete("/:pid", validateProductId, async (req, res) => {
+    try {
+        await ProductManager.deleteProduct(req.productId); // Usamos el productId validado
+        res.status(200).json({ status: "success", message: "Product deleted" });
+    } catch (error) {
+        error500(res, error);
     }
-    
-    let productDb = await ProductManager.getProductById(productId)
+});
 
-    if(!productDb){
-        res.setHeader('Content-type','application/json')
-        return res.status(404).json({status:"error",error:"product not found"})
-    }
-
-    try{
-        ProductManager.deleteProduct(productId)
-        res.setHeader('Content-type','application/json')
-        return res.status(200).json({status:"success",message:"product delete"})
-    }catch (error){
-        error500(res,error)
-    }
-})
-
-module.exports = ProductRouter
+module.exports = ProductRouter;
