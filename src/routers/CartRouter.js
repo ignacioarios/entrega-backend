@@ -3,8 +3,8 @@ const CartManager = require("../models/CartManager")
 const ProductManager = require("../models/ProductManager")
 const error500  = require("../utils")
 
-CartManager.setPath("./src/data/carts.json")
-ProductManager.setPath("./src/data/products.json")
+CartManager.setPath("./data/carts.json")
+ProductManager.setPath("./data/products.json")
 
 const CartRouter = express.Router()
 

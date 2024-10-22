@@ -2,7 +2,7 @@ const express = require("express")
 const ProductManager = require("../models/ProductManager")
 const error500  = require("../utils")
 
-ProductManager.setPath("./src/data/products.json")
+ProductManager.setPath("./data/products.json")
 
 const ProductRouter = express.Router()
 
