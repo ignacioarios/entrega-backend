@@ -3,10 +3,21 @@ const ProductManager = require("../models/ProductManager");
 const { validateProductId, validateProductData } = require("../validations/validations");
 const error500 = require("../utils");
 
-ProductManager.setPath("./data/products.json");
+ProductManager.setPath("../data/products.json");
 
 const ProductRouter = express.Router();
 
+// Obtener todos los productos
+ProductRouter.get("/", async (req, res) => {
+    try {
+        const products = await ProductManager.getProducts();
+        res.status(200).json(products); // Devuelve los productos en formato JSON
+    } catch (error) {
+        error500(res, error);
+    }
+});
+
+// Agregar un nuevo producto
 ProductRouter.post("/", validateProductData, async (req, res) => {
     try {
         const newProduct = await ProductManager.addProduct(req.body);
@@ -16,6 +27,7 @@ ProductRouter.post("/", validateProductData, async (req, res) => {
     }
 });
 
+// Obtener un producto por ID
 ProductRouter.get("/:pid", validateProductId, async (req, res) => {
     try {
         const product = await ProductManager.getProductById(req.productId); // Usamos el productId validado
@@ -28,6 +40,7 @@ ProductRouter.get("/:pid", validateProductId, async (req, res) => {
     }
 });
 
+// Actualizar un producto
 ProductRouter.put("/:pid", validateProductId, validateProductData, async (req, res) => {
     try {
         const updatedProduct = await ProductManager.updateProduct(req.productId, req.body); // Usamos productId y validamos datos
@@ -37,6 +50,7 @@ ProductRouter.put("/:pid", validateProductId, validateProductData, async (req, r
     }
 });
 
+// Eliminar un producto
 ProductRouter.delete("/:pid", validateProductId, async (req, res) => {
     try {
         await ProductManager.deleteProduct(req.productId); // Usamos el productId validado

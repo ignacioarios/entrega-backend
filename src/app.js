@@ -8,8 +8,8 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
-app.use("/api/products",ProductRouter)
-app.use("/api/carts",CartRouter)
+app.use("/products",ProductRouter)
+app.use("/carts",CartRouter)
 
 const server = app.listen(PORT,()=>{
     console.log("Server startup")
