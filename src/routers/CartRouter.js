@@ -1,7 +1,7 @@
 const express = require("express");
 const CartManager = require("../models/CartManager");
 const ProductManager = require("../models/ProductManager");
-const { validateCartId, validateProductId } = require("../validations/CartValidations");
+const { validateCartId, validateProductId } = require("../validations/validations");
 const error500 = require("../utils");
 
 CartManager.setPath("./data/carts.json");

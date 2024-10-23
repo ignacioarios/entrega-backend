@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const { validateCartExists } = require("../middlewares/validations");
+const { validateCartExists } = require("../validations/validations");
 
 class CartManager {
     static #carts = [];
