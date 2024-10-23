@@ -19,9 +19,9 @@ const validateProductId = (req, res, next) => {
 };
 
 const validateProductData = (req, res, next) => {
-    const { name, price } = req.body;
-    if (!name || !price) {
-        return res.status(400).json({ status: "error", error: "Missing name or price" });
+    const { title, price } = req.body;
+    if (!title || !price) {
+        return res.status(400).json({ status: "error", error: "Missing title or price" });
     }
     if (typeof price !== 'number' || price <= 0) {
         return res.status(400).json({ status: "error", error: "Invalid price value" });

@@ -76,32 +76,29 @@ class ProductManager {
     static async updateProduct(id, title, description, code, price, status, stock, category, thumbnails) {
         await this.#checkFileExistsAndLoad();
 
+        // Asegúrate de que el id sea un número
+        id = Number(id); // Convertir a número si es necesario
+
         let product = this.#products.find(p => p.id === id);
-        console.log("update product");
         if (!product) {
             console.error(`Product ${id} not found.`);
-            return;
+            return { error: `Product ${id} not found.` }; // Retornar un objeto de error
         }
 
-        if (title)
-            product.title = title;
-        if (description)
-            product.description = description;
-        if (code)
-            product.code = code;
-        if (price)
-            product.price = price;
-        if (status)
-            product.status = status;
-        if (stock)
-            product.stock = stock;
-        if (category)
-            product.category = category;
-        if (thumbnails)
-            product.thumbnails = thumbnails;
+        // Actualizar solo los campos que fueron proporcionados
+        if (title !== undefined) product.title = title;
+        if (description !== undefined) product.description = description;
+        if (code !== undefined) product.code = code;
+        if (price !== undefined) product.price = price;
+        if (status !== undefined) product.status = status;
+        if (stock !== undefined) product.stock = stock;
+        if (category !== undefined) product.category = category;
+        if (thumbnails !== undefined) product.thumbnails = thumbnails;
 
         await this.#updateFile();
         console.log(`Product ${id} updated.`);
+
+        return product; // Retornar el producto actualizado
     }
 
     static async deleteProduct(id) {
@@ -113,11 +110,13 @@ class ProductManager {
 
     static async #updateFile() {
         try {
+            console.log("Saving products:", this.#products); // Ver los productos antes de guardar
             await fs.writeFile(this.#path, JSON.stringify(this.#products, null, 2));
         } catch (error) {
             console.error(`Error updating file: ${error}`);
         }
     }
+    
 
     static async #readFile() {
         try {
@@ -134,7 +133,7 @@ class ProductManager {
         try {
             await fs.access(this.#path);
             await this.#readFile();
-        } catch(error) {
+        } catch (error) {
             console.error(`File at path "${this.#path}" does not exist: ${error}`);
         }
     }

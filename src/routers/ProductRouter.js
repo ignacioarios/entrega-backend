@@ -20,13 +20,13 @@ ProductRouter.get("/", async (req, res) => {
 // Agregar un nuevo producto
 ProductRouter.post("/", validateProductData, async (req, res) => {
     try {
-        const newProduct = await ProductManager.addProduct(req.body);
+        const { title, description, code, price, status, stock, category, thumbnails } = req.body;
+        const newProduct = await ProductManager.addProduct(title, description, code, price, status, stock, category, thumbnails);
         res.status(201).json({ status: "success", message: "Product added", product: newProduct });
     } catch (error) {
         error500(res, error);
     }
 });
-
 // Obtener un producto por ID
 ProductRouter.get("/:pid", validateProductId, async (req, res) => {
     try {
