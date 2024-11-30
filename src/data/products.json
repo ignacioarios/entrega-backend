@@ -1,0 +1,81 @@
+[
+  {
+    "id": 1,
+    "title": "Café Suave Colombiano",
+    "description": "Café molido de origen colombiano, sabor suave y aroma delicado",
+    "code": "CI01",
+    "price": 15900,
+    "status": true,
+    "stock": 50,
+    "category": "Internacionales",
+    "thumbnails": [
+      "https://http2.mlstatic.com/D_630319-MLU74330944546_022024-C.jpg"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Plato de Café",
+    "description": "Plato de café de porcelana, diseño a juego con la taza",
+    "code": "VA01",
+    "price": 6000,
+    "status": true,
+    "stock": 120,
+    "category": "Vajillas",
+    "thumbnails": [
+      "https://http2.mlstatic.com/D_NQ_NP_811736-MLU70705656653_072023-O.webp"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Taza de Porcelana",
+    "description": "Taza de porcelana blanca, diseño clásico",
+    "code": "VA02",
+    "price": 7000,
+    "status": true,
+    "stock": 120,
+    "category": "Vajillas",
+    "thumbnails": [
+      "https://www.rioshopdeco.com.ar/10006-large_default/taza-cafe-tavola-porcelana-blanca-art-tctabco-7626.jpg"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Café  Molido Torrado",
+    "description": "Ideal para disfrutar una taza suave y reconfortante en cualquier momento del día.",
+    "code": "CN01",
+    "price": 8000,
+    "status": true,
+    "stock": 100,
+    "category": "Nacionales",
+    "thumbnails": [
+      "https://www.cafe5hispanos.com.ar/wp-content/uploads/2021/09/Productos-4-27.png"
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Café Feo",
+    "description": "Ideal para no tomar nunca.",
+    "code": "CN02",
+    "price": 9000,
+    "status": false,
+    "stock": 0,
+    "category": "Nacionales",
+    "thumbnails": [
+      "https://www.cafe5hispanos.com.ar/wp-content/uploads/2021/09/Productos-4-27.png"
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Product Title",
+    "description": "Product Description",
+    "code": "Product Code",
+    "price": 100,
+    "status": true,
+    "stock": 50,
+    "category": "Category Name",
+    "thumbnails": [
+      "image1.jpg",
+      "image2.jpg"
+    ]
+  }
+]

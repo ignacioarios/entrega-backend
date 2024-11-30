@@ -1,0 +1,75 @@
+<article class="containerProductos">
+    <div class="contenedorProductos">
+        {{#each products.payload}}
+        <div class="product">
+            <div class="imgContain">
+                <img class="productImg" src={{thumbnails.[0]}} alt={{title}} />
+            </div>
+            <div class="descripcion">
+                <h3 class="productTitle">{{title}}</h3>
+                <div class="descripciones">
+                    <div class=>
+
+                        <p class="descriptionP">
+                            {{description}}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="categoryP">Categoria: {{category}}</p>
+                    </div>
+                    <div>
+                        <p class="codeP">Code:{{code}}</p>
+                    </div>
+                    <div>
+                        <p class="idP">Id:{{id}}</p>
+                    </div>
+                    <div>
+                        <p class="priceP">Price:{{price}}</p>
+                    </div>
+                    <div>
+                        <p class="statusP">Status:{{status}}</p>
+                    </div>
+                    <div>
+                        <p>Stock:{{stock}}</p>
+                    </div>
+                    <div class="description quantity">
+                        <small>cant.<input type="number" name="quantity" class="quantityP" value="1" required /></small>
+                    </div>
+                    <div class="addCarts">
+                        <label for="cartId">elige</label>
+                        {{#if ../carts.length}}
+                        <select name="carts" id="cartId">
+                            {{#each ../carts}}
+                            <option value="{{_id}}">{{_id}}</option>
+                            {{/each}}
+                        </select>
+                        {{else}}
+                        <p>Crea tu carrito en caso de no haber uno<span><button onclick="createCart()">crea un carrito</button></span></p>
+                        {{/if}}
+                        <button onclick="addToCart('{{id}}', this)" class="addCart">Agrega al carrito</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+
+
+    </div>
+
+    <div class="pagination">
+        {{#if products.hasPrevPage}}
+        <a
+            href="/products?limit={{../limit}}&page={{products.prevPage}}&sort={{../sort}}&query={{../query}}">Previous</a>
+        {{/if}}
+
+        <p>Page: {{products.page}}</p>
+
+        {{#if products.hasNextPage}}
+        <a href="/products?limit={{../limit}}&page={{products.nextPage}}&sort={{../sort}}&query={{../query}}">Next</a>
+        {{/if}}
+        <p>Of: {{products.totalPages}}</p>
+    </div>
+
+
+</article>
+<script src="/js/index.js"></script>

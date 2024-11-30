@@ -1,0 +1,29 @@
+{{>nav}}
+{{#if cart.length}}
+<div class="containerCart">
+    {{#each cart}}
+        <div class="cart">
+            <div class="cartImg ">
+                <img src={{product.thumbnails.[0]}} alt={{product.title}}>
+            </div>
+            <div class="cartInfo">
+                <p class="cartTitle">{{product.title}}</p>
+                <p class="cartPrice">{{product.price}} </p>
+                <p class="cartCode">Codigo: {{product.code}} </p>
+                <p class="cartId">ID: {{product._id}} </p>
+                <p class="cartStock">Cant. disponible: {{product.stock}} </p>
+                <p class="cartCategory">Categoria: {{product.category}} </p>
+                <p class="cartDescription">Descripcion del producto: {{product.description}} </p>
+                <p class="cartStatus">Estado: {{product.status}} </p>
+                <p class="cartQuantity">Cantidad: {{quantity}} </p>
+                <p>Total: {{total}}</p>
+                <button onclick="deleteProduct('{{../cartId}}','{{product._id}}')">Eliminar</button>
+            </div>
+        </div>
+    {{/each}}
+</div>
+{{else}}
+    <h1>El carrito no contiene productos </h1>
+{{/if}}
+
+<script src="/js/index.js"></script>
